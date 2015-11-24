@@ -1,0 +1,61 @@
+html, body {
+	height: 100%;
+	margin: 0; 
+	background-color: #00cccc;
+	font-family: calibri;
+}
+
+#center-pane {
+	width: 800px;
+	margin: 0 auto;
+	height: 100%;
+	padding: 0 10px 0 10px;
+	background-color: white;
+	border-left: 3px solid black;
+	border-right: 3px solid black;
+}
+
+#opponents-pane {
+	display: table;
+	margin: 0 auto;
+	padding-top: 20px;
+}
+
+.opponent-pane {
+	width: 160px;
+	float: left;
+	margin: 0 10px 0 10px;
+	text-align: center;
+}
+
+#pileText-pane {
+	text-align: center;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+#handText-pane {
+	text-align: center;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	color: red;
+}
+
+#cards-pane {
+	text-align: center;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+#turnText-pane {
+	text-align: center;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+#controls-pane {
+	text-align: center;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
