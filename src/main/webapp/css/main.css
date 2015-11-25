@@ -45,6 +45,14 @@ html, body {
 	text-align: center;
 	margin-top: 20px;
 	margin-bottom: 20px;
+	display: table;
+	margin: 0 auto;
+	width: 560px; /* we want to accommodate 7 cards in a row */
+}
+
+.card-pane {
+	float: left;
+	margin: 5px;
 }
 
 #turnText-pane {
@@ -58,4 +66,3 @@ html, body {
 	margin-top: 20px;
 	margin-bottom: 20px;
 }
-

@@ -1,40 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<title>Cheat</title>
 	<link rel="stylesheet" type="text/css" href="css/main.css" />
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 </head>
 <body>
-<div id="center-pane">
+<div id="center-pane" data-ng-app="cheat" data-ng-controller="gameController">
 	<div id="opponents-pane">
 		<div class="opponent-pane">
 			<img src="images/players/branston.gif" />
 			<div>Branston the Eyrie</div>
-			<div>has 11 cards</div>
+			<div>has {{ game.getAIPlayer1().hand.length }} cards</div>
 		</div>
 		<div class="opponent-pane">
 			<img src="images/players/timmy.gif" />
 			<div>Timmy the Tuskaninny</div>
-			<div>has 11 cards</div>
+			<div>has {{ game.getAIPlayer2().hand.length }} cards</div>
 		</div>
 		<div class="opponent-pane">
 			<img src="images/players/chufferbob.gif" />
 			<div>Chuffer Bob the Meerca</div>
-			<div>has 11 cards</div>
+			<div>has {{ game.getAIPlayer3().hand.length }} cards</div>
 		</div>
 	</div>
 	
-	<div id="pileText-pane">The Pile has 0 cards in it</div>
+	<div id="pileText-pane">The Pile has {{ game.pile.length }} cards in it</div>
 	
-	<div id="handText-pane">YOUR HAND (13) cards</div>
+	<div id="handText-pane">YOUR HAND ({{ game.getHumanPlayer().hand.length }}) cards</div>
 	
 	<div id="cards-pane">
-		<img src="images/cards/1_clubs.gif" />
-		<img src="images/cards/2_clubs.gif" />
-		<img src="images/cards/3_clubs.gif" />
-		<img src="images/cards/4_clubs.gif" />
-		<img src="images/cards/5_clubs.gif" />
-		<img src="images/cards/6_clubs.gif" />
-		<img src="images/cards/7_clubs.gif" />
+		<div class="card-pane" data-ng-repeat="card in game.getHumanPlayer().hand">
+			<img src="images/cards/{{ card.getImageName() }}.gif" />
+		</div>
 	</div>
 
 	<div id="turnText-pane">You can play cards of any value this turn!</div>
@@ -56,8 +54,19 @@
 			<option>Queen</option>
 			<option>King</option>
 		</select>
-			<button>Go!</button>
+		<button>Go!</button>
 	</div>
 </div>
+
+<script src="js/cards.js"></script>
+<script src="js/cheat.js"></script>
+<script>
+var app = angular.module('cheat', []);
+app.controller('gameController', function($scope, $http) {
+	$scope.game = new Cheat();
+	$scope.game.start();
+});
+</script>
+
 </body>
 </html>
