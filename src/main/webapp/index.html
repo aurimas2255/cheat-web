@@ -9,17 +9,17 @@
 <div id="center-pane" data-ng-app="cheat" data-ng-controller="gameController">
 	<div id="opponents-pane">
 		<div class="opponent-pane">
-			<img src="images/players/branston.gif" />
+			<img src="images/players/branston.gif" width="100" height="100" />
 			<div>Branston the Eyrie</div>
 			<div>has {{ game.getAIPlayer1().hand.length }} cards</div>
 		</div>
 		<div class="opponent-pane">
-			<img src="images/players/timmy.gif" />
+			<img src="images/players/timmy.gif" width="100" height="100" />
 			<div>Timmy the Tuskaninny</div>
 			<div>has {{ game.getAIPlayer2().hand.length }} cards</div>
 		</div>
 		<div class="opponent-pane">
-			<img src="images/players/chufferbob.gif" />
+			<img src="images/players/chufferbob.gif" width="100" height="100" />
 			<div>Chuffer Bob the Meerca</div>
 			<div>has {{ game.getAIPlayer3().hand.length }} cards</div>
 		</div>
@@ -30,31 +30,45 @@
 	<div id="handText-pane">YOUR HAND ({{ game.getHumanPlayer().hand.length }}) cards</div>
 	
 	<div id="cards-pane">
-		<div class="card-pane" data-ng-repeat="card in game.getHumanPlayer().hand">
-			<img src="images/cards/{{ card.getImageName() }}.gif" />
+		<div class="card-pane" data-ng-class="{'selected': isSelected($index)}" 
+				data-ng-repeat="card in game.getHumanPlayer().hand" 
+				data-ng-click="toggleSelect($index)">
+			<img data-ng-src="images/cards/{{ card.getImageName() }}.gif" style="display:block" />
+			<div class="card-pane-overlay"></div>
 		</div>
 	</div>
 
-	<div id="turnText-pane">You can play cards of any value this turn!</div>
+	<div id="turnText-pane" data-ng-class="{'turnText-highlight': game.isChallengePhase()}">
+		{{ game.turnDescription }}
+	</div>
 	
 	<div id="controls-pane">
-		<select>
-			<option>Select Card Value</option>
-			<option>Ace</option>
-			<option>2</option>
-			<option>3</option>
-			<option>4</option>
-			<option>5</option>
-			<option>6</option>
-			<option>7</option>
-			<option>8</option>
-			<option>9</option>
-			<option>10</option>
-			<option>Jack</option>
-			<option>Queen</option>
-			<option>King</option>
-		</select>
-		<button>Go!</button>
+		<div id="playerTurnStart-controls-pane" data-ng-show="game.isHumanPlayerTurn() && game.isClaimPhase()">
+			<select data-ng-model="declaredValue">
+				<option value="">Select Card Value</option>
+				<option value="1">Ace</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+				<option value="7">7</option>
+				<option value="8">8</option>
+				<option value="9">9</option>
+				<option value="10">10</option>
+				<option value="11">Jack</option>
+				<option value="12">Queen</option>
+				<option value="13">King</option>
+			</select>
+			<button data-ng-click="makeClaim()">Go!</button>
+		</div>
+		<div id="challengePhase-controls-pane" data-ng-show="game.isChallengePhase()">
+			<button>Accuse {{ game.currentClaim.player.name }} of cheating!</button>
+			<button data-ng-click="nextTurn()">Let {{ game.currentClaim.player.name }} slide</button>
+		</div>
+		<div id="turnEnd-controls-pane" data-ng-show="game.isResultPhase()">
+			<button data-ng-click="nextTurn()">Continue</button>
+		</div>
 	</div>
 </div>
 
@@ -64,7 +78,34 @@
 var app = angular.module('cheat', []);
 app.controller('gameController', function($scope, $http) {
 	$scope.game = new Cheat();
-	$scope.game.start();
+	$scope.selectedCardIndexes = [];
+	$scope.declaredValue;
+	
+	var game = $scope.game;
+	var selectedCardIndexes = $scope.selectedCardIndexes;
+	
+	$scope.isSelected = function(index) {
+		return selectedCardIndexes.indexOf(index) != -1;
+	}
+	
+	$scope.toggleSelect = function(index) {
+		if (selectedCardIndexes.indexOf(index) == -1) {
+			selectedCardIndexes.push(index);
+		} else {
+			selectedCardIndexes.splice(selectedCardIndexes.indexOf(index), 1);
+		}
+	}
+	
+	$scope.makeClaim = function() {
+		game.takeHumanPlayerTurn($scope.declaredValue, selectedCardIndexes);
+		selectedCardIndexes = [];
+	}
+	
+	$scope.nextTurn = function() {
+		game.startNextPlayerTurn();
+	}
+	
+	game.start();
 });
 </script>
 

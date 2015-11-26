@@ -3,15 +3,31 @@ function Card(value, suit) {
 	this.suit = suit;
 	
 	this.getImageName = function() {
-		return this.value + "_" + this.suit;
+		return this.value + "_" + this.suit.description;
+	}
+	
+	this.equals = function(card) {
+		return this.value == card.value && this.suit === card.suit;
 	}
 }
 
 var Suit = {
-	CLUB: 'clubs',
-	SPADE: 'spades',
-	HEART: 'hearts',
-	DIAMOND: 'diamonds'
+	CLUB: {
+		description: 'clubs',
+		value: 0
+	},
+	SPADE: {
+		description: 'spades',
+		value: 1
+	},
+	HEART: {
+		description: 'hearts',
+		value: 2
+	},
+	DIAMOND: {
+		description: 'diamonds',
+		value: 3
+	}
 };
 
 function Deck() {
